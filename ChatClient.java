@@ -11,7 +11,6 @@ import java.math.*;
 class ClientReadThread extends Thread
 {
   Socket client;
-  Scanner scan = new Scanner(System.in);
   ClientReadThread(Socket client)
   {
     this.client = client;
@@ -19,6 +18,9 @@ class ClientReadThread extends Thread
 
   public void run()
   {
+    Scanner scan = new Scanner(System.in);
+
+    // This reader thread keeps on checking whether have sent a message or not.
     while(true)
     {
       try
@@ -33,7 +35,6 @@ class ClientReadThread extends Thread
       {
         System.out.println("Something went wrong");
       }
-      
     }
   }
 }
@@ -41,7 +42,6 @@ class ClientReadThread extends Thread
 class ClientWriteThread extends Thread
 {
   Socket client;
-  Scanner scan = new Scanner(System.in);
   ClientWriteThread(Socket client)
   {
     this.client = client;
@@ -49,6 +49,9 @@ class ClientWriteThread extends Thread
 
   public void run()
   {
+    Scanner scan = new Scanner(System.in);
+
+    // keep on waiting for input from user to send ...
     while(true)
     {
       try
@@ -70,15 +73,16 @@ class ClientWriteThread extends Thread
 
 class ChatClient
 {
-    public static void main(String args[]) throws Exception
-    {
-        Socket client = new Socket("localhost", 9999);
+  public static void main(String args[]) throws Exception
+  {
+    // connecting to server ...
+    Socket client = new Socket("localhost", 9999);
 
-        ClientReadThread r1 = new ClientReadThread(client);
-        r1.start();
+    // After connection, create one thread for reading and other for writing ...
+    ClientReadThread r1 = new ClientReadThread(client);
+    r1.start();
 
-        ClientWriteThread w1 = new ClientWriteThread(client);
-        w1.start();
-
-    }
+    ClientWriteThread w1 = new ClientWriteThread(client);
+    w1.start();
+  }
 }
