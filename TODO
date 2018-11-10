@@ -1,0 +1,7 @@
+TODO LIST FOR SECURE CHAT APPLICATION 
+
+1.) APP is failing when either of server or client is leaving .
+2.) Peer to peer chatting is not working due to encryption. Think of a model that works fine for both cases.
+3.) handle the cases of overwriting using synchronized.
+4.) Try to make more server to handle client requests.
+
