@@ -3,7 +3,6 @@ package chatApplication;
 import java.net.*;
 import java.io.*;
 import java.util.*;
-import java.math.*;
 
 class ServerReadThread extends Thread
 {
@@ -21,14 +20,22 @@ class ServerReadThread extends Thread
     Scanner scan = new Scanner(System.in);
     while(true)
     {
+      byte[] temp = new byte[1024]; 
       try
       {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        String line;
-        if((line = bf.readLine()) != null)
+        InputStream stream = client.getInputStream();
+        int count = stream.read(temp);
+
+        byte[] data = new byte[count];
+        for(int i=0;i<count;i++)
         {
-          ServerWriteThread w1 = new ServerWriteThread(clients,line);
-          w1.start();
+          data[i] = temp[i];
+        }
+
+        if(count != 0)
+        {
+          ServerWriteThread w1 = new ServerWriteThread(clients,data);
+          w1.start(); 
         } 
       }
 

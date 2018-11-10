@@ -3,34 +3,25 @@ package chatApplication;
 import java.net.*;
 import java.io.*;
 import java.util.*;
-import java.math.*;
+
 
 class ServerWriteThread extends Thread
 {
   Hashtable<String, Socket> clients;
-  String message;
-  ServerWriteThread(Hashtable<String, Socket> clients, String message)
+  byte[] messageInBytes;
+  ServerWriteThread(Hashtable<String, Socket> clients, byte[] messageInBytes)
   {
     this.clients = clients;
-    this.message = message;
+    this.messageInBytes = messageInBytes;
   }
 
   public void run()
   {
     try
     {
-      String content[] = message.split(" ", 2);  
-      if(clients.containsKey("localhost"))
-      {
-        PrintStream p = new PrintStream(clients.get(content[0]).getOutputStream());
-        p.println(content[1]);
-        p.flush();
-      }
-      
-      else
-      {
-        System.out.println("No such User");
-      }
+      PrintStream p = new PrintStream(clients.get("localhost").getOutputStream());
+      p.write(messageInBytes, 0, messageInBytes.length);
+      p.flush();
     }
 
     catch(Exception e)

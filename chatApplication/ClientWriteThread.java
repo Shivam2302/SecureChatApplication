@@ -3,14 +3,24 @@ package chatApplication;
 import java.net.Socket;
 import java.io.*;
 import java.util.*;
-import java.math.*;
+import java.nio.channels.*;
+import javax.crypto.*;
+import java.security.*;
+import javax.crypto.spec.*;
 
 class ClientWriteThread extends Thread
 {
   Socket client;
+  IvParameterSpec ivsec;
+  SecretKey secretKey;
+
+  Secret sec = new Secret();
+
   ClientWriteThread(Socket client)
   {
     this.client = client;
+    ivsec = sec.getInitializationVector();
+    secretKey = sec.getKey();
   }
 
   public void run()
@@ -22,9 +32,12 @@ class ClientWriteThread extends Thread
     {
       try
       {
-        String message = scan.nextLine();    
+        String message = scan.nextLine();   
+        EncryptAndDecrypt e = new EncryptAndDecrypt();
+        byte[] byteCipherText = e.encrypt(message, secretKey, ivsec);
+
         PrintStream p = new PrintStream(client.getOutputStream());
-        p.println(message);
+        p.write(byteCipherText, 0, byteCipherText.length);
         p.flush();
       }
 

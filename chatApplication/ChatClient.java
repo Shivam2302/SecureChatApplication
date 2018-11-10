@@ -1,9 +1,6 @@
 package chatApplication;
 
 import java.net.Socket;
-//import java.io.*;
-//import java.util.*;
-//import java.math.*;
 
 class ChatClient
 {
